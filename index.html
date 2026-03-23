@@ -244,3 +244,87 @@
     </div>
   </div>
 </div>
+
+<scripts>
+  
+let contadorRegistros = 0;
+let listaRegistros    = [];
+
+async function registrarUsuario() {
+  const nombre = document.getElementById('db-nombre').value.trim();
+  const correo = document.getElementById('db-correo').value.trim();
+  if (!nombre || !correo) { alert('Completa nombre y email.'); return; }
+  const boton = document.getElementById('db-btn');
+  boton.classList.add('loading');
+  try {
+    await fetch('https://jsonplaceholder.typicode.com/users', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: nombre, email: correo, username: nombre.toLowerCase().replace(/\s+/g, '_') })
+    });
+    boton.classList.remove('loading');
+    listaRegistros.push({ id: ++contadorRegistros, nombre, correo });
+    mostrarTablaDB();
+    document.getElementById('db-nombre').value = '';
+    document.getElementById('db-correo').value = '';
+  } catch (error) { boton.classList.remove('loading'); alert('Error de conexión.'); }
+}
+
+function mostrarTablaDB() {
+  const filas = document.getElementById('db-filas');
+  filas.innerHTML = '';
+  listaRegistros.forEach((registro, indice) => {
+    const fila = document.createElement('div');
+    fila.className = 'dbr';
+    fila.style.animationDelay = indice * .05 + 's';
+    fila.innerHTML = `<span class="dbid">${registro.id}</span><span>${registro.nombre}</span><span style="color:var(--muted);font-size:.68rem">${registro.correo}</span><span><div class="dbok">✓ OK</div></span>`;
+    filas.appendChild(fila);
+  });
+}
+
+async function enviarSMS() {
+  const telefono = document.getElementById('sms-telefono').value.trim();
+  const mensaje  = document.getElementById('sms-mensaje').value.trim();
+  if (!telefono || !mensaje) { alert('Ingresa teléfono y mensaje.'); return; }
+  const boton     = document.getElementById('sms-btn');
+  const resultado = document.getElementById('sms-resultado');
+  boton.classList.add('loading');
+  try {
+    const respuesta = await fetch('http://localhost:3000/send-sms', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ to: telefono, body: mensaje })
+    });
+    const datos = await respuesta.json();
+    boton.classList.remove('loading');
+    if (datos.success) {
+      resultado.innerHTML = `
+        <div class="smsbub">📱 ${mensaje}</div>
+        <div class="smsmeta">Para: ${telefono}</div>
+        <div style="margin-top:10px">
+          <span class="smsok">✅ Enviado · <span style="font-size:.62rem">${datos.sid}</span></span>
+        </div>`;
+    } else {
+      resultado.innerHTML = `<div style="color:red;font-size:.75rem">❌ Error: ${datos.error}</div>`;
+    }
+  } catch (error) {
+    boton.classList.remove('loading');
+    resultado.innerHTML = `<div style="color:red;font-size:.75rem">❌ No se pudo conectar al servidor.</div>`;
+  }
+}
+
+
+function cargarVideo() {
+  const videoId = document.getElementById('yt-id').value.trim();
+  if (!videoId) return;
+  document.getElementById('yt-frame').src = `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=1`;
+}
+function comandoYT(comando) {
+  document.getElementById('yt-frame').contentWindow.postMessage(
+    JSON.stringify({ event: 'command', func: comando, args: [] }),
+    'https://www.youtube.com'
+  );
+}
+</script>
+</body>
+</html>
