@@ -246,7 +246,141 @@
 </div>
 
 <scripts>
-  
+  let mapaInicializado = false;
+
+function abrirModal(id) {
+  document.getElementById('m-' + id).classList.add('show');
+  document.body.style.overflow = 'hidden';
+  if (id === 'geo' && !mapaInicializado) {
+    setTimeout(iniciarMapa, 300);
+    mapaInicializado = true;
+  }
+}
+function cerrarModal(id) {
+  document.getElementById(id).classList.remove('show');
+  document.body.style.overflow = '';
+  if (id === 'm-stream') comandoYT('pauseVideo');
+}
+function cerrarFondo(evento, id) {
+  if (evento.target === evento.currentTarget) cerrarModal(id);
+}
+document.addEventListener('keydown', tecla => {
+  if (tecla.key === 'Escape') {
+    document.querySelectorAll('.overlay.show').forEach(overlay => {
+      overlay.classList.remove('show');
+      document.body.style.overflow = '';
+    });
+  }
+});
+
+let mapa, marcador;
+function iniciarMapa() {
+  mapa = L.map('map').setView([25.4232, -100.9929], 13);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(mapa);
+  marcador = L.marker([25.4232, -100.9929]).addTo(mapa).bindPopup('<b>📍 Ramos Arizpe, Coah.</b>').openPopup();
+  mapa.on('zoomend', () => document.getElementById('zoom-v').textContent = mapa.getZoom());
+  mapa.on('click', evento => {
+    const { lat, lng } = evento.latlng;
+    marcador.setLatLng([lat, lng]).bindPopup(`${lat.toFixed(4)}, ${lng.toFixed(4)}`).openPopup();
+    document.getElementById('lat-v').textContent = lat.toFixed(4);
+    document.getElementById('lng-v').textContent = lng.toFixed(4);
+    document.getElementById('geo-lat').value = lat.toFixed(4);
+    document.getElementById('geo-lng').value = lng.toFixed(4);
+  });
+}
+function geoLocalizar() {
+  const latitud  = parseFloat(document.getElementById('geo-lat').value);
+  const longitud = parseFloat(document.getElementById('geo-lng').value);
+  const ciudad   = document.getElementById('geo-ciudad').value || `${latitud.toFixed(4)}, ${longitud.toFixed(4)}`;
+  if (!mapa || isNaN(latitud) || isNaN(longitud)) return;
+  mapa.setView([latitud, longitud], 13);
+  marcador.setLatLng([latitud, longitud]).bindPopup(`<b>📍 ${ciudad}</b>`).openPopup();
+  document.getElementById('lat-v').textContent = latitud.toFixed(4);
+  document.getElementById('lng-v').textContent = longitud.toFixed(4);
+  document.getElementById('zoom-v').textContent = 13;
+}
+
+const tweets = [
+  { usuario: 'CodeMX',     handle: '@codemx_dev',   texto: 'Aprendiendo sobre {Q} con REST APIs. El mashup queda increíble 🚀 #WebDev',                       tiempo: '2m',  corazones: '41',  retweets: '7'  },
+  { usuario: 'TechLatam',  handle: '@techlatam',     texto: '¿Ya exploraste {Q}? Cambia el desarrollo frontend moderno 🔥 #JavaScript',                         tiempo: '5m',  corazones: '128', retweets: '31' },
+  { usuario: 'DevCoahuila',handle: '@devcoahuila',   texto: 'Integrando {Q} en Saber Hacer. APIs en tiempo real desde el browser 💻 #ITC',                      tiempo: '11m', corazones: '19',  retweets: '4'  },
+  { usuario: 'APIsWorld',  handle: '@apisworld',     texto: 'Consumir {Q} es más fácil de lo que crees. fetch() es tu mejor amigo 🤓',                           tiempo: '22m', corazones: '87',  retweets: '21' },
+];
+function obtenerTweets() {
+  const termino    = document.getElementById('social-busqueda').value.trim() || 'APIs';
+  const contenedor = document.getElementById('tweets-feed');
+  const boton      = document.getElementById('social-btn');
+  boton.classList.add('loading');
+  contenedor.innerHTML = '';
+  setTimeout(() => {
+    boton.classList.remove('loading');
+    tweets.forEach((tweet, indice) => {
+      const elemento = document.createElement('div');
+      elemento.className = 'tweet';
+      elemento.style.animationDelay = indice * .07 + 's';
+      elemento.innerHTML = `<div class="ttop"><div class="tava">${tweet.usuario[0]}</div><div><div class="tname">${tweet.usuario}</div><div class="thandle">${tweet.handle}</div></div></div><div class="tbody">${tweet.texto.replace('{Q}', '<strong>' + termino + '</strong>')}</div><div class="tfoot"><span>❤ ${tweet.corazones}</span><span>🔁 ${tweet.retweets}</span><span>🕐 hace ${tweet.tiempo}</span></div>`;
+      contenedor.appendChild(elemento);
+    });
+  }, 700);
+}
+
+(async () => {
+  try {
+    const respuesta  = await fetch('https://fakestoreapi.com/products/categories');
+    const categorias = await respuesta.json();
+    const selector   = document.getElementById('ecom-categoria');
+    categorias.forEach(cat => {
+      const opcion = document.createElement('option');
+      opcion.value = cat;
+      opcion.textContent = cat.charAt(0).toUpperCase() + cat.slice(1);
+      selector.appendChild(opcion);
+    });
+  } catch (error) {}
+})();
+
+async function buscarProducto() {
+  const termino = document.getElementById('ecom-busqueda').value.trim().toLowerCase();
+  if (!termino) return;
+  const boton = document.getElementById('ecom-btn');
+  const lista = document.getElementById('products-list');
+  boton.classList.add('loading');
+  lista.innerHTML = '';
+  try {
+    const respuesta  = await fetch('https://fakestoreapi.com/products');
+    const productos  = await respuesta.json();
+    boton.classList.remove('loading');
+    const resultados = productos.filter(p => p.title.toLowerCase().includes(termino) || p.category.toLowerCase().includes(termino)).slice(0, 5);
+    if (!resultados.length) { lista.innerHTML = '<p class="empty">Sin resultados. Prueba: shirt, jacket, gold, ring.</p>'; return; }
+    mostrarProductos(resultados);
+  } catch (error) { boton.classList.remove('loading'); lista.innerHTML = '<p class="empty">Error de conexión.</p>'; }
+}
+
+async function filtrarCategoria() {
+  const categoria = document.getElementById('ecom-categoria').value;
+  if (!categoria) return;
+  const boton = document.getElementById('ecom-btn');
+  const lista = document.getElementById('products-list');
+  boton.classList.add('loading');
+  lista.innerHTML = '';
+  try {
+    const respuesta  = await fetch(`https://fakestoreapi.com/products/category/${encodeURIComponent(categoria)}`);
+    const resultados = await respuesta.json();
+    boton.classList.remove('loading');
+    mostrarProductos(resultados.slice(0, 5));
+  } catch (error) { boton.classList.remove('loading'); }
+}
+
+function mostrarProductos(elementos) {
+  const lista = document.getElementById('products-list');
+  lista.innerHTML = '';
+  elementos.forEach((producto, indice) => {
+    const elemento = document.createElement('div');
+    elemento.className = 'pitem';
+    elemento.style.animationDelay = indice * .07 + 's';
+    elemento.innerHTML = `<img src="${producto.image}" class="pimg" alt="${producto.title}"><div><div class="pname">${producto.title.substring(0, 60)}${producto.title.length > 60 ? '…' : ''}</div><div class="pprice">$${producto.price} USD</div><div class="pcat">${producto.category} · ★ ${producto.rating?.rate ?? '—'} (${producto.rating?.count ?? 0})</div></div>`;
+    lista.appendChild(elemento);
+  });
+}
 let contadorRegistros = 0;
 let listaRegistros    = [];
 
