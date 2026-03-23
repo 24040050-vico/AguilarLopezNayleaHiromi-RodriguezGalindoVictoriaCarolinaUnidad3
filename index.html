@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>API Mashup · Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<nav>
+  <div class="nav-l">
+    <span class="nav-email">apis.mashup@dashboard.dev</span>
+    <button class="nbtn" onclick="navigator.clipboard.writeText('apis.mashup@dashboard.dev')">Copy</button>
+    <button class="nbtn">CV</button>
+  </div>
+  <div class="nav-r">
+    <a href="#apis">APIs</a>
+    <a href="#servicios">Servicios</a>
+    <a href="#contact">Contacto</a>
+  </div>
+</nav>
+<section class="hero">
+  <div class="hbadge">
+    <div class="hava">API</div>
+    Dashboard Mashup &nbsp;<span class="hdot"></span>
+  </div>
+  <h1 class="htitle">Consumo de <em>APIs</em>,<br>integrado en una<br>sola pantalla.</h1>
+  <a href="#apis" class="hcta">
+    Ver ejercicios
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+      <path d="M1.5 10.5L10.5 1.5M10.5 1.5H4M10.5 1.5V8.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </a>
+</section>
+
+<div class="logos">
+  <span class="logo-item">OpenStreetMap</span>
+  <span class="logo-item"> Twitter API</span>
+  <span class="logo-item">FakeStore</span>
+  <span class="logo-item">JSONPlaceholder</span>
+  <span class="logo-item">Twilio SMS</span>
+  <span class="logo-item">YouTube</span>
+</div>
+
+<section class="section" id="apis">
+  <div class="sec-label"> Unidad 3 · Saber Hacer</div>
+  <h2 class="sec-h">Seis categorías de APIs,<br><em>funcionando en vivo.</em></h2>
+  <p class="sec-sub">Haz clic en cualquier tarjeta para abrir el ejercicio interactivo en una ventana emergente.</p>
+  <div class="grid">
+    <div class="acard" onclick="abrirModal('geo')">
+      <div class="aicon">🗺️</div>
+      <div class="atxt"><div class="anum">API 01</div><div class="atitle">Geolocalización</div><div class="adesc">Mapas interactivos con Leaflet + OpenStreetMap</div></div>
+      <div class="aplus">↗</div>
+    </div>
+    <div class="acard" onclick="abrirModal('social')">
+      <div class="aicon">📲</div>
+      <div class="atxt"><div class="anum">API 02</div><div class="atitle">Redes Sociales</div><div class="adesc">Publicaciones de Twitter / X API v2</div></div>
+      <div class="aplus">↗</div>
+    </div>
+    <div class="acard" onclick="abrirModal('ecom')">
+      <div class="aicon">🛒</div>
+      <div class="atxt"><div class="anum">API 03</div><div class="atitle">E-Commerce</div><div class="adesc">Catálogo real via FakeStore API</div></div>
+      <div class="aplus">↗</div>
+    </div>
+    <div class="acard" onclick="abrirModal('db')">
+      <div class="aicon">🗄️</div>
+      <div class="atxt"><div class="anum">API 04</div><div class="atitle">Base de Datos</div><div class="adesc">Registro de usuarios via JSONPlaceholder</div></div>
+      <div class="aplus">↗</div>
+    </div>
+    <div class="acard" onclick="abrirModal('comm')">
+      <div class="aicon">📡</div>
+      <div class="atxt"><div class="anum">API 05</div><div class="atitle">Protocolo de Comunicación</div><div class="adesc">SMS / Push / WhatsApp via Twilio API</div></div>
+      <div class="aplus">↗</div>
+    </div>
+    <div class="acard" onclick="abrirModal('stream')">
+      <div class="aicon">▶️</div>
+      <div class="atxt"><div class="anum">API 06</div><div class="atitle">Plataformas / Streaming</div><div class="adesc">YouTube IFrame Player API</div></div>
+      <div class="aplus">↗</div>
+    </div>
+  </div>
+</section>
+
+<div style="border-top:1px solid var(--b1);border-bottom:1px solid var(--b1);background:var(--w)">
+  <section class="section" id="servicios" style="padding-top:52px;padding-bottom:52px">
+    <div style="text-align:center;margin-bottom:36px">
+      <div class="sec-label">→ Servicios integrados</div>
+      <h2 class="sec-h" style="margin-bottom:0">Colabora con <em>tecnologías</em><br>para crear resultados reales.</h2>
+    </div>
+    <div class="svc-grid">
+      <div><div style="font-size:1.3rem;margin-bottom:10px">📍</div><div style="font-size:.8rem;font-weight:600;margin-bottom:5px">Geolocalización</div><div style="font-size:.7rem;color:var(--muted);line-height:1.55">Mapas interactivos, coordenadas y ubicación en tiempo real.</div></div>
+      <div><div style="font-size:1.3rem;margin-bottom:10px">🔗</div><div style="font-size:.8rem;font-weight:600;margin-bottom:5px">Redes Sociales</div><div style="font-size:.7rem;color:var(--muted);line-height:1.55">Extracción de publicaciones y datos de perfiles públicos.</div></div>
+      <div><div style="font-size:1.3rem;margin-bottom:10px">📦</div><div style="font-size:.8rem;font-weight:600;margin-bottom:5px">E-Commerce</div><div style="font-size:.7rem;color:var(--muted);line-height:1.55">Búsqueda en catálogos con imagen, precio y descripción.</div></div>
+      <div><div style="font-size:1.3rem;margin-bottom:10px">☁️</div><div style="font-size:.8rem;font-weight:600;margin-bottom:5px">Comunicación</div><div style="font-size:.7rem;color:var(--muted);line-height:1.55">SMS, push notifications y mensajes vía APIs de terceros.</div></div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <span>© 2024 API Mashup Dashboard · Unidad 3 Saber Hacer</span>
+  <div style="display:flex;gap:20px"><a href="#">LinkedIn</a><a href="#">GitHub</a><a href="#">Instagram</a></div>
+</footer>
+
+
+<!-- Modal 01 · Geolocalización -->
+<div class="overlay" id="m-geo" onclick="cerrarFondo(event,'m-geo')">
+  <div class="modal">
+    <div class="mhead">
+      <div class="micon">🗺️</div>
+      <div class="mtxt"><div class="mnum">API 01 · Geolocalización</div><div class="mtitle">Mapa interactivo</div></div>
+      <div class="mclose" onclick="cerrarModal('m-geo')">✕</div>
+    </div>
+    <div class="mbody">
+      <div class="row">
+        <input type="text" id="geo-lat" placeholder="Latitud" value="25.4232">
+        <input type="text" id="geo-lng" placeholder="Longitud" value="-100.9929">
+      </div>
+      <div class="row">
+        <input type="text" id="geo-ciudad" placeholder="Nombre del lugar (opcional)">
+        <button class="btn" id="geo-btn" onclick="geoLocalizar()"><div class="spin"></div> Mostrar</button>
+      </div>
+      <div id="map"></div>
+      <div class="coords">
+        <span>Lat: <b id="lat-v">25.4232</b></span>
+        <span>Lng: <b id="lng-v">-100.9929</b></span>
+        <span>Zoom: <b id="zoom-v">13</b></span>
+      </div>
+      <div class="note">API: <code>Leaflet.js</code> + tiles de <code>OpenStreetMap</code>. Haz clic en el mapa para reubicar el marcador.</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal 02 · Redes Sociales -->
+<div class="overlay" id="m-social" onclick="cerrarFondo(event,'m-social')">
+  <div class="modal">
+    <div class="mhead">
+      <div class="micon">📲</div>
+      <div class="mtxt"><div class="mnum">API 02 · Redes Sociales</div><div class="mtitle">Twitter / X API v2</div></div>
+      <div class="mclose" onclick="cerrarModal('m-social')">✕</div>
+    </div>
+    <div class="mbody">
+      <div class="row">
+        <input type="text" id="social-busqueda" placeholder="Hashtag o término a buscar...">
+        <button class="btn" id="social-btn" onclick="obtenerTweets()"><div class="spin"></div> Buscar</button>
+      </div>
+      <div id="tweets-feed" class="tlist"><p class="empty">Ingresa un término y presiona Buscar.</p></div>
+      <div class="note">Simula la respuesta de <code>Twitter/X API v2</code> — en producción requiere Bearer Token OAuth 2.0.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal 03 · E-Commerce -->
+<div class="overlay" id="m-ecom" onclick="cerrarFondo(event,'m-ecom')">
+  <div class="modal">
+    <div class="mhead">
+      <div class="micon">🛒</div>
+      <div class="mtxt"><div class="mnum">API 03 · E-Commerce</div><div class="mtitle">Catálogo de productos</div></div>
+      <div class="mclose" onclick="cerrarModal('m-ecom')">✕</div>
+    </div>
+    <div class="mbody">
+      <div class="row">
+        <input type="text" id="ecom-busqueda" placeholder="Buscar: jacket, gold, shirt...">
+        <button class="btn" id="ecom-btn" onclick="buscarProducto()"><div class="spin"></div> Buscar</button>
+      </div>
+      <select id="ecom-categoria" onchange="filtrarCategoria()"><option value="">Filtrar por categoría</option></select>
+      <div id="products-list" class="plist"><p class="empty">Busca un producto o selecciona una categoría.</p></div>
+      <div class="note">Datos reales de <code>fakestoreapi.com/products</code> — API pública con imágenes, precios y ratings.</div>
+    </div>
+  </div>
+</div>
+
