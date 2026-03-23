@@ -173,3 +173,74 @@
   </div>
 </div>
 
+<div class="overlay" id="m-db" onclick="cerrarFondo(event,'m-db')">
+  <div class="modal">
+    <div class="mhead">
+      <div class="micon">🗄️</div>
+      <div class="mtxt"><div class="mnum">API 04 · Base de Datos</div><div class="mtitle">Registro en la nube</div></div>
+      <div class="mclose" onclick="cerrarModal('m-db')">✕</div>
+    </div>
+    <div class="mbody">
+      <input type="text" id="db-nombre" placeholder="Nombre de usuario">
+      <input type="email" id="db-correo" placeholder="Correo electrónico">
+      <div><button class="btn" id="db-btn" onclick="registrarUsuario()"><div class="spin"></div> Registrar en la nube</button></div>
+      <div class="dbt">
+        <div class="dbr dbh"><span>#</span><span>Usuario</span><span>Email</span><span>Estado</span></div>
+        <div id="db-filas"><div class="empty">Sin registros aún.</div></div>
+      </div>
+      <div class="note">POST real a <code>jsonplaceholder.typicode.com/users</code> — el servidor devuelve un ID al nuevo registro.</div>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="m-comm" onclick="cerrarFondo(event,'m-comm')">
+  <div class="modal">
+    <div class="mhead">
+      <div class="micon">📡</div>
+      <div class="mtxt"><div class="mnum">API 05 · Protocolo de Comunicación</div><div class="mtitle">SMS / Push / WhatsApp</div></div>
+      <div class="mclose" onclick="cerrarModal('m-comm')">✕</div>
+    </div>
+    <div class="mbody">
+      <input type="text" id="sms-telefono" placeholder="Número destino: +52 844 000 0000">
+      <input type="text" id="sms-mensaje" placeholder="Escribe tu mensaje...">
+      <select id="sms-canal">
+        <option value="sms">📱 SMS (Twilio API)</option>
+        <option value="push">🔔 Push Notification (Firebase FCM)</option>
+        <option value="wa">💬 WhatsApp Business API</option>
+      </select>
+      <div><button class="btn" id="sms-btn" onclick="enviarSMS()"><div class="spin"></div> Enviar mensaje</button></div>
+      <div id="sms-resultado"></div>
+      <div class="note">Simula HTTPS POST a <code>api.twilio.com/2010-04-01/Accounts/{SID}/Messages</code> con Auth Token.</div>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="m-stream" onclick="cerrarFondo(event,'m-stream')">
+  <div class="modal">
+    <div class="mhead">
+      <div class="micon">▶️</div>
+      <div class="mtxt"><div class="mnum">API 06 · Plataformas / Streaming</div><div class="mtitle">YouTube IFrame Player</div></div>
+      <div class="mclose" onclick="cerrarModal('m-stream')">✕</div>
+    </div>
+    <div class="mbody">
+      <div class="row">
+        <input type="text" id="yt-id" placeholder="ID del video de YouTube" value="dQw4w9WgXcQ">
+        <button class="btn" onclick="cargarVideo()">Cargar</button>
+      </div>
+      <div class="vwrap">
+        <iframe id="yt-frame"
+          src="https://www.youtube.com/embed/dQw4w9WgXcQ?enablejsapi=1"
+          allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture"
+          allowfullscreen></iframe>
+      </div>
+      <div class="vbtns">
+        <button class="vbtn" onclick="comandoYT('playVideo')">▶ Play</button>
+        <button class="vbtn" onclick="comandoYT('pauseVideo')">⏸ Pause</button>
+        <button class="vbtn" onclick="comandoYT('stopVideo')">⏹ Stop</button>
+        <button class="vbtn" onclick="comandoYT('mute')">🔇 Mute</button>
+        <button class="vbtn" onclick="comandoYT('unMute')">🔊 Unmute</button>
+      </div>
+      <div class="note">Controlado via <code>postMessage</code> con la <code>YouTube IFrame Player API</code>.</div>
+    </div>
+  </div>
+</div>
